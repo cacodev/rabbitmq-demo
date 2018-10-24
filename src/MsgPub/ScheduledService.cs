@@ -1,9 +1,11 @@
 
 using System;
+using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 
 namespace MsgPub
@@ -26,7 +28,10 @@ namespace MsgPub
 
         private void DoWork(object state)
         {
-            _msgPubSvc.PubMsg("Hello! " + DateTime.Now.ToString());
+            dynamic msg = new ExpandoObject();
+            msg.msg = "Hello!";
+            msg.created = DateTime.Now;
+            _msgPubSvc.PubMsg(JsonConvert.SerializeObject(msg));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
