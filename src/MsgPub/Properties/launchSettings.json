@@ -1,6 +1,6 @@
 {
     "profiles": {
-      "MsgSub1": {
+      "MsgPub": {
           "commandName": "Project",
           "environmentVariables": {
               "ASPNETCORE_ENVIRONMENT": "Development"
