@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Steeltoe.CloudFoundry.Connector.RabbitMQ;
 
 namespace MsgPub
 {
@@ -24,7 +25,9 @@ namespace MsgPub
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            services.AddRabbitMQConnection(Configuration);
+            
+            services.AddSingleton<IMsgPubSvc, MsgPubSvc>();
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, ScheduledService>();
         }
 

@@ -8,12 +8,17 @@ using RabbitMQ.Client;
 
 namespace MsgPub
 {
-    public class MsgPubSvc
+    public class MsgPubSvc: IMsgPubSvc
     {
-        public static void PubMsg(string msg)
+        private readonly IConnectionFactory _factory;
+
+        public MsgPubSvc (IConnectionFactory factory)
+        {
+            _factory = factory;
+        } 
+        public void PubMsg(string msg)
         {    
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
+            using (var connection = _factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {

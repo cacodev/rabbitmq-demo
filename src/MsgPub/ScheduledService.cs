@@ -4,13 +4,20 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 
 namespace MsgPub
 {
     public class ScheduledService : IHostedService
     {
         private Timer _timer;
+        private readonly IMsgPubSvc _msgPubSvc;
 
+        public ScheduledService (IMsgPubSvc msgPubSvc)
+        {
+            _msgPubSvc = msgPubSvc;
+        } 
+        
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
@@ -19,7 +26,7 @@ namespace MsgPub
 
         private void DoWork(object state)
         {
-            MsgPubSvc.PubMsg("Hello! " + DateTime.Now.ToString());
+            _msgPubSvc.PubMsg("Hello! " + DateTime.Now.ToString());
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
